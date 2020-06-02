@@ -32,7 +32,13 @@ static int st_lsm6dso_i2c_read(struct device *dev, u8 addr,
 	msg[1].len = len;
 	msg[1].buf = data;
 
-	return i2c_transfer(client->adapter, msg, 2);
+	//return i2c_transfer(client->adapter, msg, 2);
+	dev_info(dev, "fake read from 0x%02X\n", addr);
+	memset(data, 0, len);
+	if (addr == ST_LSM6DSO_REG_WHOAMI_ADDR)
+		data[0] = ST_LSM6DSO_WHOAMI_VAL;
+
+	return len;
 }
 
 static int st_lsm6dso_i2c_write(struct device *dev, u8 addr, int len,
@@ -50,7 +56,9 @@ static int st_lsm6dso_i2c_write(struct device *dev, u8 addr, int len,
 	msg.len = len + 1;
 	msg.buf = send;
 
-	return i2c_transfer(client->adapter, &msg, 1);
+	//return i2c_transfer(client->adapter, &msg, 1);
+	dev_info(dev, "fake write to 0x%02X\n", addr);
+	return len;
 }
 
 static const struct st_lsm6dso_transfer_function st_lsm6dso_transfer_fn = {
